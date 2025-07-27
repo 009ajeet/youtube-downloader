@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Downloader - Premium Experience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #ec4899;
+            --secondary-dark: #db2777;
+            --accent: #06b6d4;
+            --accent-warm: #f59e0b;
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --surface: #1e293b;
+            --surface-light: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border: #475569;
+            --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 8px 25px 0 rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 20px 60px 0 rgba(0, 0, 0, 0.3);
+            --shadow-xl: 0 25px 80px 0 rgba(0, 0, 0, 0.4);
+            --glow: 0 0 20px rgba(99, 102, 241, 0.3);
+            --glow-pink: 0 0 20px rgba(236, 72, 153, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(6, 182, 212, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            opacity: 0.05;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        .container {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            box-shadow: var(--shadow-xl);
+            padding: 3rem 2.5rem;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl), var(--glow);
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem auto;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 26px;
+            z-index: -1;
+            opacity: 0.3;
+            filter: blur(8px);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin-bottom: 3rem;
+            opacity: 0.8;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .url-input-container {
+            position: relative;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 1.2rem 1.5rem 1.2rem 3.5rem;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 15, 35, 0.8);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1), var(--glow);
+            transform: translateY(-2px);
+        }
+
+        input[type="text"]::placeholder {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus+.input-icon {
+            color: var(--primary);
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            position: relative;
+            padding: 1.2rem 2rem;
+            border: none;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-mp3 {
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
+            color: white;
+        }
+
+        .btn-mp3:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg), var(--glow-pink);
+        }
+
+        .btn-mp4 {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-mp4:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg), var(--glow);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .alert {
+            background: rgba(236, 72, 153, 0.1);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            color: var(--secondary);
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            display: none;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-alert {
+            background: rgba(6, 182, 212, 0.1);
+            border-color: rgba(6, 182, 212, 0.3);
+            color: var(--accent);
+        }
+
+        .spinner-container {
+            display: none;
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem auto;
+            position: relative;
+        }
+
+        .spinner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 3px solid rgba(99, 102, 241, 0.2);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .spinner::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            right: 6px;
+            bottom: 6px;
+            border: 3px solid rgba(236, 72, 153, 0.2);
+            border-bottom: 3px solid var(--secondary);
+            border-radius: 50%;
+            animation: spin 1.5s linear infinite reverse;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.3s ease;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200px 0;
+            }
+
+            100% {
+                background-position: calc(200px + 100%) 0;
+            }
+        }
+
+        /* Modal Styles */
+        .modal-bg {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            box-shadow: var(--shadow-xl);
+            padding: 2.5rem 2rem;
+            min-width: 320px;
+            max-width: 90vw;
+            text-align: center;
+            position: relative;
+            transform: scale(0.9);
+            animation: modalIn 0.3s ease forwards;
+        }
+
+        .modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        .modal h2 {
+            margin: 0 0 2rem 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--text-primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .quality-list {
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .quality-btn {
+            padding: 1rem 1.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            background: rgba(15, 15, 35, 0.8);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quality-btn:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md), var(--glow);
+        }
+
+        .quality-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .quality-btn:hover::before {
+            left: 100%;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Features Section */
+        .features {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 16px;
+            background: rgba(15, 15, 35, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .feature-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+                max-width: none;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .btn-group {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+
+            .modal {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem 1rem;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            input[type="text"] {
+                padding: 1rem 1.2rem 1rem 3rem;
+            }
+
+            .btn {
+                padding: 1rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Dark mode enhancements */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-primary: #ffffff;
+                --text-secondary: #e2e8f0;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* High contrast mode */
+        @media (prefers-contrast: high) {
+            .container {
+                border: 2px solid var(--text-primary);
+            }
+
+            .btn {
+                border: 2px solid var(--text-primary);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <div class="logo">
+            <i class="fab fa-youtube"></i>
+        </div>
+
+        <h1>YouTube Downloader</h1>
+        <p class="subtitle">Download your favorite videos and music in premium quality</p>
+
+        <div class="alert" id="alert"></div>
+
+        <div class="input-group">
+            <div class="url-input-container">
+                <input type="text" id="url" placeholder="Paste your YouTube link here...">
+                <i class="fas fa-link input-icon"></i>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-mp3" id="mp3">
+                    <i class="fas fa-music"></i>
+                    Download MP3
+                </button>
+                <button class="btn btn-mp4" id="mp4">
+                    <i class="fas fa-video"></i>
+                    Download MP4
+                </button>
+            </div>
+        </div>
+
+        <div class="spinner-container" id="spinner-container">
+            <div class="spinner"></div>
+            <div class="loading-text">Processing your download...</div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="feature-text">Lightning Fast</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-hd-video"></i>
+                    </div>
+                    <div class="feature-text">HD Quality</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="feature-text">100% Safe</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-bg" id="modal-bg">
+        <div class="modal">
+            <h2>Select Quality</h2>
+            <div class="quality-list" id="quality-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced JavaScript with premium features
+        const mp3Qualities = [
+            { value: '320kbps', label: '320 kbps - Highest Quality', icon: 'fas fa-crown' },
+            { value: '256kbps', label: '256 kbps - High Quality', icon: 'fas fa-star' },
+            { value: '192kbps', label: '192 kbps - Good Quality', icon: 'fas fa-check' },
+            { value: '128kbps', label: '128 kbps - Standard', icon: 'fas fa-volume-up' }
+        ];
+
+        const mp4Qualities = [
+            { value: '1080p', label: '1080p - Full HD', icon: 'fas fa-crown' },
+            { value: '720p', label: '720p - HD Ready', icon: 'fas fa-star' },
+            { value: '480p', label: '480p - Standard', icon: 'fas fa-check' },
+            { value: '360p', label: '360p - Mobile', icon: 'fas fa-mobile-alt' },
+            { value: '240p', label: '240p - Low Quality', icon: 'fas fa-wifi' }
+        ];
+
+        let currentType = null;
+        let isDownloading = false;
+        let downloadProgress = 0;
+
+        // DOM Elements
+        const urlInput = document.getElementById('url');
+        const mp3Btn = document.getElementById('mp3');
+        const mp4Btn = document.getElementById('mp4');
+        const alertBox = document.getElementById('alert');
+        const modalBg = document.getElementById('modal-bg');
+        const qualityList = document.getElementById('quality-list');
+        const spinnerContainer = document.getElementById('spinner-container');
+
+        // Enhanced alert system
+        function showAlert(msg, type = 'error') {
+            alertBox.textContent = msg;
+            alertBox.className = `alert ${type === 'success' ? 'success-alert' : ''}`;
+            alertBox.style.display = 'block';
+
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                hideAlert();
+            }, 5000);
+        }
+
+        function hideAlert() {
+            alertBox.style.display = 'none';
+        }
+
+        // Enhanced modal system
+        function showModal(type) {
+            qualityList.innerHTML = '';
+            const qualities = type === 'mp3' ? mp3Qualities : mp4Qualities;
+
+            qualities.forEach((quality, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'quality-btn';
+                btn.innerHTML = `
+                    <i class="${quality.icon}"></i>
+                    ${quality.label}
+                `;
+                btn.onclick = () => selectQuality(quality.value);
+
+                // Add entrance animation delay
+                btn.style.animationDelay = `${index * 0.1}s`;
+                btn.style.animation = 'slideUp 0.3s ease forwards';
+
+                qualityList.appendChild(btn);
+            });
+
+            modalBg.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideModal() {
+            modalBg.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Enhanced loading system
+        function showLoading() {
+            spinnerContainer.style.display = 'block';
+            updateProgress(0);
+        }
+
+        function hideLoading() {
+            spinnerContainer.style.display = 'none';
+            downloadProgress = 0;
+        }
+
+        function updateProgress(percent) {
+            const progressFill = document.querySelector('.progress-fill');
+            if (progressFill) {
+                progressFill.style.width = `${percent}%`;
+                document.querySelector('.progress-bar').style.display = percent > 0 ? 'block' : 'none';
+            }
+        }
+
+        // Enhanced URL validation
+        function validateUrl(url) {
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|v\/)|youtu\.be\/)[\w-]+/i;
+            return url && youtubeRegex.test(url.trim());
+        }
+
+        // Download state management
+        function setDownloading(downloading) {
+            isDownloading = downloading;
+            mp3Btn.disabled = downloading;
+            mp4Btn.disabled = downloading;
+            urlInput.disabled = downloading;
+
+            if (downloading) {
+                document.body.style.cursor = 'wait';
+            } else {
+                document.body.style.cursor = 'default';
+            }
+        }
+
+        // Enhanced download function
+        async function startDownload(quality) {
+            hideModal();
+            hideAlert();
+
+            const url = urlInput.value.trim();
+
+            if (!validateUrl(url)) {
+                showAlert('Please enter a valid YouTube URL. Make sure it includes youtube.com or youtu.be');
+                return;
+            }
+
+            setDownloading(true);
+            showLoading();
+
+            try {
+                // Simulate progress for better UX
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += Math.random() * 15;
+                    if (progress > 90) progress = 90;
+                    updateProgress(progress);
+                }, 500);
+
+                const response = await fetch('/download', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        url: url,
+                        type: currentType,
+                        quality: quality
+                    })
+                });
+
+                clearInterval(progressInterval);
+                updateProgress(100);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Download failed');
+                }
+
+                // Handle file download
+                const blob = await response.blob();
+                const contentDisposition = response.headers.get('Content-Disposition');
+                let filename = `download.${currentType === 'mp3' ? 'mp3' : 'mp4'}`;
+
+                if (contentDisposition) {
+                    const filenameMatch = contentDisposition.match(/filename="(.+?)"/);
+                    if (filenameMatch) {
+                        filename = filenameMatch[1];
+                    }
+                }
+
+                // Create download link
+                const downloadUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = filename;
+                a.style.display = 'none';
+
+                document.body.appendChild(a);
+                a.click();
+
+                // Cleanup
+                setTimeout(() => {
+                    window.URL.revokeObjectURL(downloadUrl);
+                    document.body.removeChild(a);
+                }, 100);
+
+                showAlert(`Successfully downloaded ${filename}!`, 'success');
+
+                // Clear input after successful download
+                urlInput.value = '';
+
+            } catch (error) {
+                console.error('Download error:', error);
+                showAlert(error.message || 'An unexpected error occurred. Please try again.');
+            } finally {
+                setDownloading(false);
+                hideLoading();
+            }
+        }
+
+        function selectQuality(quality) {
+            startDownload(quality);
+        }
+
+        // Event listeners
+        mp3Btn.addEventListener('click', () => {
+            if (isDownloading) return;
+            currentType = 'mp3';
+            showModal('mp3');
+        });
+
+        mp4Btn.addEventListener('click', () => {
+            if (isDownloading) return;
+            currentType = 'mp4';
+            showModal('mp4');
+        });
+
+        // Modal close events
+        modalBg.addEventListener('click', (e) => {
+            if (e.target === modalBg) {
+                hideModal();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                hideModal();
+                hideAlert();
+            }
+
+            if (e.key === 'Enter' && !isDownloading) {
+                const url = urlInput.value.trim();
+                if (validateUrl(url)) {
+                    // Default to MP4 on Enter
+                    currentType = 'mp4';
+                    showModal('mp4');
+                }
+            }
+        });
+
+        // Input validation on paste
+        urlInput.addEventListener('paste', (e) => {
+            setTimeout(() => {
+                const url = urlInput.value.trim();
+                if (url && !validateUrl(url)) {
+                    showAlert('Invalid YouTube URL format. Please check and try again.');
+                } else if (url && validateUrl(url)) {
+                    hideAlert();
+                }
+            }, 100);
+        });
+
+        // Auto-focus input on page load
+        window.addEventListener('load', () => {
+            urlInput.focus();
+        });
+
+        // Prevent multiple rapid clicks
+        let lastClickTime = 0;
+        [mp3Btn, mp4Btn].forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const now = Date.now();
+                if (now - lastClickTime < 1000) {
+                    e.preventDefault();
+                    return false;
+                }
+                lastClickTime = now;
+            });
+        });
+
+        // Analytics tracking function
+        function trackDownload(type, quality) {
+            console.log(`Download started: ${type} - ${quality}`);
+        }
+
+        // Console log for initialization
+        console.log('🎵 YouTube Downloader loaded! Made with ❤️');
+    </script>
+</body>
+
+</html>
